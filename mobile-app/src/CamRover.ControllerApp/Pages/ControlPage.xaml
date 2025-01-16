@@ -1,0 +1,301 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+/*
+ *	Copyright (c) 2025 Denis Rozhkov <denis@rozhkoff.com>
+ *	This file is part of cam-rover.
+ *
+ *	cam-rover is free software: you can redistribute it and/or
+ *	modify it under the terms of the GNU General Public License as published by
+ *	the Free Software Foundation, either version 3 of the License, or (at your
+ *	option) any later version.
+ *
+ *	cam-rover is distributed in the hope that it will be
+ *	useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ *	Public License for more details.
+ *
+ *	You should have received a copy of the GNU General Public License along with
+ *	cam-rover. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+// SPDX-FileCopyrightText: 2025 Denis Rozhkov <denis@rozhkoff.com>
+// SPDX-License-Identifier: GPL-3.0-or-later
+	-->
+<ContentPage
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+	x:Class="CamRover.ControllerApp.ControlPage"
+	xmlns:vm="clr-namespace:CamRover.ControllerApp.ViewModels"
+	x:DataType="vm:ControlViewModel"
+	xmlns:f="clr-namespace:Fonts">
+
+	<Grid>
+
+		<Grid
+			RowDefinitions="Auto,*,Auto">
+
+			<Grid
+				Grid.Row="1"
+				RowDefinitions="Auto,*">
+
+				<GraphicsView
+					Grid.Row="1"
+					Grid.Column="0"
+					Drawable="{Binding FrameDrawable}"
+					x:Name="_frameView"></GraphicsView>
+
+				<Grid
+					Grid.Row="0"
+					RowDefinitions="Auto,Auto"
+					ColumnDefinitions="Auto,*">
+
+					<Slider
+						Grid.Row="0"
+						Grid.Column="1"
+						Minimum="0"
+						Maximum="255"
+						Value="{Binding FlashDuty}"
+						IsEnabled="{Binding IsConnected}"></Slider>
+
+					<Image
+						Grid.Row="0"
+						Grid.Column="0">
+						<Image.Source>
+							<FontImageSource
+								Glyph="{x:Static f:FluentUI.flashlight_16_regular}"
+								FontFamily="{x:Static f:FluentUI.FontFamily}"
+								Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+						</Image.Source>
+					</Image>
+
+					<VerticalStackLayout
+						Grid.Row="1"
+						Grid.Column="0">
+
+						<HorizontalStackLayout>
+
+							<Label
+								Text="L"
+								Margin="10"></Label>
+
+							<Label
+								Text="{Binding SpeedL}"
+								Margin="10"></Label>
+
+						</HorizontalStackLayout>
+
+						<HorizontalStackLayout>
+
+							<Label
+								Text="R"
+								Margin="10"></Label>
+
+							<Label
+								Text="{Binding SpeedR}"
+								Margin="10"></Label>
+
+						</HorizontalStackLayout>
+
+						<HorizontalStackLayout>
+
+							<Label
+								Text="FPS"
+								Margin="10"></Label>
+
+							<Label
+								Text="{Binding Fps}"
+								Margin="10"></Label>
+
+						</HorizontalStackLayout>
+
+					</VerticalStackLayout>
+
+				</Grid>
+
+			</Grid>
+
+			<Grid
+				Grid.Row="0"
+				ColumnDefinitions="Auto,Auto,Auto,*,Auto"
+				Margin="20">
+
+				<ImageButton
+					Grid.Row="0"
+					Grid.Column="0"
+					Command="{Binding StartStreamingCommand}">
+					<ImageButton.Source>
+						<FontImageSource
+							Glyph="{x:Static f:FluentUI.video_16_regular}"
+							FontFamily="{x:Static f:FluentUI.FontFamily}"
+							Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+					</ImageButton.Source>
+				</ImageButton>
+
+				<ImageButton
+					Grid.Row="0"
+					Grid.Column="1"
+					Command="{Binding StopStreamingCommand}">
+					<ImageButton.Source>
+						<FontImageSource
+							Glyph="{x:Static f:FluentUI.video_off_16_regular}"
+							FontFamily="{x:Static f:FluentUI.FontFamily}"
+							Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+					</ImageButton.Source>
+				</ImageButton>
+
+				<ImageButton
+					Grid.Row="0"
+					Grid.Column="2">
+					<ImageButton.Source>
+						<FontImageSource
+							Glyph="{x:Static f:FluentUI.crop_arrow_rotate_16_regular}"
+							FontFamily="{x:Static f:FluentUI.FontFamily}"
+							Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+					</ImageButton.Source>
+				</ImageButton>
+
+				<ImageButton
+					Grid.Row="0"
+					Grid.Column="4"
+					Command="{Binding OpenSettingsCommand}">
+					<ImageButton.Source>
+						<FontImageSource
+							Glyph="{x:Static f:FluentUI.settings_16_regular}"
+							FontFamily="{x:Static f:FluentUI.FontFamily}"
+							Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+					</ImageButton.Source>
+				</ImageButton>
+
+			</Grid>
+
+			<Grid
+				Grid.Row="2"
+				RowDefinitions="Auto,Auto,Auto"
+				ColumnDefinitions="Auto,Auto,*,Auto,Auto,Auto"
+				Margin="20">
+
+				<ImageButton
+					Grid.Row="0"
+					Grid.Column="1"
+					IsEnabled="{Binding IsConnected}">
+					<ImageButton.Source>
+						<FontImageSource
+							Glyph="{x:Static f:FluentUI.triangle_12_regular}"
+							FontFamily="{x:Static f:FluentUI.FontFamily}"
+							Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+					</ImageButton.Source>
+					<!--<ImageButton.GestureRecognizers>
+					<PointerGestureRecognizer
+						PointerPressedCommand="{Binding ForwardPressedCommand}"
+						PointerReleasedCommand="{Binding ForwardReleasedCommand}"
+						PointerEnteredCommand="{Binding ForwardPressedCommand}"
+						PointerExitedCommand="{Binding ForwardReleasedCommand}"
+						PointerPressed="PointerGestureRecognizer_PointerPressed"></PointerGestureRecognizer>
+				</ImageButton.GestureRecognizers>-->
+					<ImageButton.Behaviors>
+						<toolkit:TouchBehavior
+							CurrentTouchStatusChanged="Forward_CurrentTouchStatusChanged">
+						</toolkit:TouchBehavior>
+					</ImageButton.Behaviors>
+				</ImageButton>
+
+				<ImageButton
+					Grid.Row="1"
+					Grid.Column="1"
+					IsEnabled="{Binding IsConnected}">
+					<ImageButton.Source>
+						<FontImageSource
+							Glyph="{x:Static f:FluentUI.split_horizontal_12_regular}"
+							FontFamily="{x:Static f:FluentUI.FontFamily}"
+							Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+					</ImageButton.Source>
+					<ImageButton.Behaviors>
+						<toolkit:TouchBehavior
+							CurrentTouchStatusChanged="Stop_CurrentTouchStatusChanged">
+						</toolkit:TouchBehavior>
+					</ImageButton.Behaviors>
+				</ImageButton>
+
+				<ImageButton
+					Grid.Row="2"
+					Grid.Column="1"
+					IsEnabled="{Binding IsConnected}">
+					<ImageButton.Source>
+						<FontImageSource
+							Glyph="{x:Static f:FluentUI.triangle_down_12_regular}"
+							FontFamily="{x:Static f:FluentUI.FontFamily}"
+							Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+					</ImageButton.Source>
+					<!--<ImageButton.GestureRecognizers>
+					<PointerGestureRecognizer
+						PointerPressedCommand="{Binding ReversePressedCommand}"
+						PointerReleasedCommand="{Binding ReverseReleasedCommand}"
+						PointerEnteredCommand="{Binding ReversePressedCommand}"
+						PointerExitedCommand="{Binding ReverseReleasedCommand}"></PointerGestureRecognizer>
+				</ImageButton.GestureRecognizers>-->
+					<ImageButton.Behaviors>
+						<toolkit:TouchBehavior
+							CurrentTouchStatusChanged="Reverse_CurrentTouchStatusChanged">
+						</toolkit:TouchBehavior>
+					</ImageButton.Behaviors>
+				</ImageButton>
+
+				<ImageButton
+					Grid.Row="2"
+					Grid.Column="3"
+					IsEnabled="{Binding IsConnected}">
+					<ImageButton.Source>
+						<FontImageSource
+							Glyph="{x:Static f:FluentUI.triangle_left_12_regular}"
+							FontFamily="{x:Static f:FluentUI.FontFamily}"
+							Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+					</ImageButton.Source>
+					<ImageButton.Behaviors>
+						<toolkit:TouchBehavior
+							CurrentTouchStatusChanged="Left_CurrentTouchStatusChanged">
+						</toolkit:TouchBehavior>
+					</ImageButton.Behaviors>
+				</ImageButton>
+
+				<ImageButton
+					Grid.Row="2"
+					Grid.Column="4"
+					IsEnabled="{Binding IsConnected}">
+					<ImageButton.Source>
+						<FontImageSource
+							Glyph="{x:Static f:FluentUI.split_vertical_12_regular}"
+							FontFamily="{x:Static f:FluentUI.FontFamily}"
+							Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+					</ImageButton.Source>
+					<ImageButton.Behaviors>
+						<toolkit:TouchBehavior
+							CurrentTouchStatusChanged="Center_CurrentTouchStatusChanged">
+						</toolkit:TouchBehavior>
+					</ImageButton.Behaviors>
+				</ImageButton>
+
+				<ImageButton
+					Grid.Row="2"
+					Grid.Column="5"
+					IsEnabled="{Binding IsConnected}">
+					<ImageButton.Source>
+						<FontImageSource
+							Glyph="{x:Static f:FluentUI.triangle_right_12_regular}"
+							FontFamily="{x:Static f:FluentUI.FontFamily}"
+							Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+					</ImageButton.Source>
+					<ImageButton.Behaviors>
+						<toolkit:TouchBehavior
+							CurrentTouchStatusChanged="Right_CurrentTouchStatusChanged">
+						</toolkit:TouchBehavior>
+					</ImageButton.Behaviors>
+				</ImageButton>
+
+			</Grid>
+
+		</Grid>
+
+	</Grid>
+
+</ContentPage>

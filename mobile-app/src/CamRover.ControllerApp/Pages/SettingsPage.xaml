@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+/*
+ *	Copyright (c) 2025 Denis Rozhkov <denis@rozhkoff.com>
+ *	This file is part of cam-rover.
+ *
+ *	cam-rover is free software: you can redistribute it and/or
+ *	modify it under the terms of the GNU General Public License as published by
+ *	the Free Software Foundation, either version 3 of the License, or (at your
+ *	option) any later version.
+ *
+ *	cam-rover is distributed in the hope that it will be
+ *	useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ *	Public License for more details.
+ *
+ *	You should have received a copy of the GNU General Public License along with
+ *	cam-rover. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+// SPDX-FileCopyrightText: 2025 Denis Rozhkov <denis@rozhkoff.com>
+// SPDX-License-Identifier: GPL-3.0-or-later
+	-->
+
+<ContentPage
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	x:Class="CamRover.ControllerApp.Pages.SettingsPage"
+	xmlns:vm="clr-namespace:CamRover.ControllerApp.ViewModels"
+	x:DataType="vm:SettingsViewModel"
+	xmlns:f="clr-namespace:Fonts"
+	xmlns:strings="clr-namespace:CamRover.ControllerApp.Resources.Strings"
+	Title="{x:Static strings:Localized.Label_Settings}">
+
+	<Grid
+		RowDefinitions="*,Auto,2*"
+		ColumnDefinitions="*,8*,*">
+
+		<Grid
+			Grid.Row="1"
+			Grid.Column="1"
+			RowDefinitions="Auto,Auto,Auto"
+			ColumnDefinitions="Auto,*,Auto">
+
+			<Label
+				Grid.Row="0"
+				Grid.Column="0"
+				Text="{x:Static strings:Localized.Label_SpeedIncrement}"
+				Style="{StaticResource styleLabelLarge}"></Label>
+
+			<Slider
+				Grid.Row="0"
+				Grid.Column="1"
+				Minimum="1"
+				Maximum="50"
+				Value="{Binding MoveSpeedIncrement}"></Slider>
+
+			<Label
+				Grid.Row="0"
+				Grid.Column="2"
+				Text="{Binding MoveSpeedIncrement}"
+				Style="{StaticResource styleLabelLarge}"></Label>
+
+			<!--<Label
+				Grid.Row="1"
+				Grid.Column="0"
+				Text="{x:Static strings:Localized.Label_DiscoveryPort}"
+				Style="{StaticResource styleLabelLarge}"></Label>
+
+			<Entry
+				Grid.Row="1"
+				Grid.Column="1"
+				Keyboard="Numeric"></Entry>
+
+			<Label
+				Grid.Row="2"
+				Grid.Column="0"
+				Text="{x:Static strings:Localized.Label_CameraResolution}"
+				Style="{StaticResource styleLabelLarge}"></Label>
+
+			<VerticalStackLayout
+				Grid.Row="2"
+				Grid.Column="1">
+
+				<Label
+					Text="NNNxNNN"></Label>
+
+				<Stepper
+					Maximum="3"></Stepper>
+
+			</VerticalStackLayout>-->
+
+		</Grid>
+
+	</Grid>
+
+</ContentPage>
