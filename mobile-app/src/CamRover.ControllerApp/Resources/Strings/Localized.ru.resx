@@ -120,6 +120,9 @@
   <data name="Label_CameraResolution" xml:space="preserve">
     <value>Разрешение камеры</value>
   </data>
+  <data name="Label_Deadzone" xml:space="preserve">
+    <value>Мертвая зона скорости</value>
+  </data>
   <data name="Label_DiscoveryPort" xml:space="preserve">
     <value>Порт</value>
   </data>

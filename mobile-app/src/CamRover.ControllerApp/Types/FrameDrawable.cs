@@ -35,10 +35,16 @@ namespace CamRover.ControllerApp.Types
 			{
 				lock (this)
 				{
-					canvas.Rotate( -90, dirtyRect.Width / 2, dirtyRect.Height / 2 );
-					var x = (dirtyRect.Width - m_image.Width) / 2;
-					var y = (dirtyRect.Height - m_image.Height) / 2;
-					canvas.DrawImage( m_image, x, y, m_image.Width, m_image.Height );
+					try
+					{
+						canvas.Rotate( -90, dirtyRect.Width / 2, dirtyRect.Height / 2 );
+						var x = (dirtyRect.Width - m_image.Width) / 2;
+						var y = (dirtyRect.Height - m_image.Height) / 2;
+						canvas.DrawImage( m_image, x, y, m_image.Width, m_image.Height );
+					}
+					catch
+					{
+					}
 				}
 			}
 		}

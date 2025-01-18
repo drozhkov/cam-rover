@@ -70,6 +70,15 @@ namespace CamRover.ControllerApp.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Speed deadzone.
+        /// </summary>
+        internal static string Label_Deadzone {
+            get {
+                return ResourceManager.GetString("Label_Deadzone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Discovery port.
         /// </summary>
         internal static string Label_DiscoveryPort {

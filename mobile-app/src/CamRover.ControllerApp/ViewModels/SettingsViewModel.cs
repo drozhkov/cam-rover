@@ -41,6 +41,20 @@ namespace CamRover.ControllerApp.ViewModels
 			}
 		}
 
+		public uint Deadzone
+		{
+			get
+			{
+				return m_comm.Deadzone;
+			}
+			set
+			{
+				m_comm.Deadzone = value;
+				m_comm.SendCommand( CommCommand.Deadzone );
+				RaisePropertyChanged();
+			}
+		}
+
 
 		public SettingsViewModel( CommModel comm )
 		{

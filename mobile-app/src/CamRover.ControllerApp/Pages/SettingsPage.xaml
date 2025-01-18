@@ -60,6 +60,25 @@
 				Grid.Column="2"
 				Text="{Binding MoveSpeedIncrement}"
 				Style="{StaticResource styleLabelLarge}"></Label>
+			
+			<Label
+				Grid.Row="1"
+				Grid.Column="0"
+				Text="{x:Static strings:Localized.Label_Deadzone}"
+				Style="{StaticResource styleLabelLarge}"></Label>
+
+			<Slider
+				Grid.Row="1"
+				Grid.Column="1"
+				Minimum="1"
+				Maximum="50"
+				Value="{Binding Deadzone}"></Slider>
+
+			<Label
+				Grid.Row="1"
+				Grid.Column="2"
+				Text="{Binding Deadzone}"
+				Style="{StaticResource styleLabelLarge}"></Label>
 
 			<!--<Label
 				Grid.Row="1"

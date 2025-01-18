@@ -37,7 +37,8 @@ namespace CamRover.ControllerApp.Models
 		Right = 'r',
 		Flash = 'f',
 		Ack = 'a',
-		Set = 't'
+		Set = 't',
+		Deadzone = 'z'
 	}
 
 
@@ -79,6 +80,11 @@ namespace CamRover.ControllerApp.Models
 			get; set;
 		}
 
+		public uint Deadzone
+		{
+			get; set;
+		} = 30;
+
 
 		byte[] MessageMove( CommCommand cmd )
 		{
@@ -115,6 +121,19 @@ namespace CamRover.ControllerApp.Models
 				, (byte)CommCommand.Set
 				, speedLBytes[0], speedLBytes[1], speedLBytes[2], speedLBytes[3]
 				, speedRBytes[0], speedRBytes[1], speedRBytes[2], speedRBytes[3]];
+		}
+
+
+		byte[] MessageMoveDeadzone()
+		{
+			var id = Interlocked.Increment( ref m_messageId );
+			var idBytes = BitConverter.GetBytes( id );
+			var deadzone = BitConverter.GetBytes( this.Deadzone );
+			return [9
+				, idBytes[0], idBytes[1], idBytes[2], idBytes[3]
+				, (byte)CommCommand.Deadzone
+				, deadzone[0], deadzone[1], deadzone[2], deadzone[3]
+				];
 		}
 
 
@@ -356,6 +375,12 @@ namespace CamRover.ControllerApp.Models
 								case CommCommand.Set:
 									{
 										await controlUdpClient.SendAsync( MessageMoveSet(), ip );
+									}
+									break;
+
+								case CommCommand.Deadzone:
+									{
+										await controlUdpClient.SendAsync( MessageMoveDeadzone(), ip );
 									}
 									break;
 
