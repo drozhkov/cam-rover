@@ -220,9 +220,12 @@ namespace CamRover.ControllerApp.Models
 						var receiveTask = udpClient.ReceiveAsync( receiveCts.Token );
 						udpClient.Send( MessageAck(), ip );
 						var response = await receiveTask;
-						await OnFrameReceive( response.Buffer );
 
-						frameCount++;
+						if (response.Buffer.Length > 16)
+						{
+							await OnFrameReceive( response.Buffer );
+							frameCount++;
+						}
 
 						if (sw.Elapsed.TotalSeconds > 5)
 						{

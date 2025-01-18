@@ -146,7 +146,8 @@
 
 				<ImageButton
 					Grid.Row="0"
-					Grid.Column="2">
+					Grid.Column="2"
+					Command="{Binding RotateFrameCommand}">
 					<ImageButton.Source>
 						<FontImageSource
 							Glyph="{x:Static f:FluentUI.crop_arrow_rotate_16_regular}"

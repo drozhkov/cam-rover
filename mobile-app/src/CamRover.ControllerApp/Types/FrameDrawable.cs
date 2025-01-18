@@ -28,6 +28,11 @@ namespace CamRover.ControllerApp.Types
 	{
 		Microsoft.Maui.Graphics.IImage? m_image;
 
+		public float RotateDegress
+		{
+			get; set;
+		} = -90;
+
 
 		public void Draw( ICanvas canvas, RectF dirtyRect )
 		{
@@ -37,12 +42,12 @@ namespace CamRover.ControllerApp.Types
 				{
 					try
 					{
-						canvas.Rotate( -90, dirtyRect.Width / 2, dirtyRect.Height / 2 );
+						canvas.Rotate( this.RotateDegress, dirtyRect.Width / 2, dirtyRect.Height / 2 );
 						var x = (dirtyRect.Width - m_image.Width) / 2;
 						var y = (dirtyRect.Height - m_image.Height) / 2;
 						canvas.DrawImage( m_image, x, y, m_image.Width, m_image.Height );
 					}
-					catch
+					catch (Exception x)
 					{
 					}
 				}

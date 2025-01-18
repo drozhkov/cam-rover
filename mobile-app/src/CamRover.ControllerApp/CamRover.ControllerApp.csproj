@@ -49,63 +49,63 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-android|AnyCPU'">
 		<ApplicationId>net.ambersystems.camrover.controllerapp</ApplicationId>
-		<ApplicationDisplayVersion>1.0.2</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>1.0.4</ApplicationDisplayVersion>
 		<AndroidUseAapt2>True</AndroidUseAapt2>
 		<AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
 		<AndroidPackageFormat>apk</AndroidPackageFormat>
 		<EnableLLVM>False</EnableLLVM>
-		<ApplicationVersion>3</ApplicationVersion>
+		<ApplicationVersion>5</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-ios|AnyCPU'">
 		<ApplicationId>net.ambersystems.camrover.controllerapp</ApplicationId>
-		<ApplicationDisplayVersion>1.0.2</ApplicationDisplayVersion>
-		<ApplicationVersion>3</ApplicationVersion>
+		<ApplicationDisplayVersion>1.0.4</ApplicationDisplayVersion>
+		<ApplicationVersion>5</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-maccatalyst|AnyCPU'">
 		<ApplicationId>net.ambersystems.camrover.controllerapp</ApplicationId>
-		<ApplicationDisplayVersion>1.0.2</ApplicationDisplayVersion>
-		<ApplicationVersion>3</ApplicationVersion>
+		<ApplicationDisplayVersion>1.0.4</ApplicationDisplayVersion>
+		<ApplicationVersion>5</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-windows10.0.19041.0|AnyCPU'">
 		<ApplicationId>net.ambersystems.camrover.controllerapp</ApplicationId>
-		<ApplicationDisplayVersion>1.0.2</ApplicationDisplayVersion>
-		<ApplicationVersion>3</ApplicationVersion>
+		<ApplicationDisplayVersion>1.0.4</ApplicationDisplayVersion>
+		<ApplicationVersion>5</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android|AnyCPU'">
 		<ApplicationId>net.ambersystems.camrover.controllerapp</ApplicationId>
-		<ApplicationDisplayVersion>1.0.2</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>1.0.4</ApplicationDisplayVersion>
 		<AndroidPackageFormat>aab</AndroidPackageFormat>
 		<AndroidLinkTool>r8</AndroidLinkTool>
 		<AndroidUseAapt2>True</AndroidUseAapt2>
 		<AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
 		<EnableLLVM>False</EnableLLVM>
 		<DefineConstants></DefineConstants>
-		<ApplicationVersion>3</ApplicationVersion>
+		<ApplicationVersion>5</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-ios|AnyCPU'">
 		<ApplicationId>net.ambersystems.camrover.controllerapp</ApplicationId>
-		<ApplicationDisplayVersion>1.0.2</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>1.0.4</ApplicationDisplayVersion>
 		<DefineConstants></DefineConstants>
-		<ApplicationVersion>3</ApplicationVersion>
+		<ApplicationVersion>5</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-maccatalyst|AnyCPU'">
 		<ApplicationId>net.ambersystems.camrover.controllerapp</ApplicationId>
-		<ApplicationDisplayVersion>1.0.2</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>1.0.4</ApplicationDisplayVersion>
 		<DefineConstants></DefineConstants>
-		<ApplicationVersion>3</ApplicationVersion>
+		<ApplicationVersion>5</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-windows10.0.19041.0|AnyCPU'">
 		<ApplicationId>net.ambersystems.camrover.controllerapp</ApplicationId>
-		<ApplicationDisplayVersion>1.0.2</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>1.0.4</ApplicationDisplayVersion>
 		<DefineConstants></DefineConstants>
-		<ApplicationVersion>3</ApplicationVersion>
+		<ApplicationVersion>5</ApplicationVersion>
 	</PropertyGroup>
 
 	<ItemGroup>

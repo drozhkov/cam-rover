@@ -96,6 +96,11 @@ namespace CamRover.ControllerApp.ViewModels
 			get;
 		}
 
+		public RelayCommand RotateFrameCommand
+		{
+			get;
+		}
+
 		volatile bool m_isConnected;
 		public bool IsConnected
 		{
@@ -131,11 +136,6 @@ namespace CamRover.ControllerApp.ViewModels
 		{
 			get;
 		} = new FrameDrawable();
-
-		public SliderDrawable SliderDrawable
-		{
-			get;
-		} = new SliderDrawable();
 
 		public uint FlashDuty
 		{
@@ -278,6 +278,13 @@ namespace CamRover.ControllerApp.ViewModels
 					m_comm.SpeedL = s / 2;
 					m_comm.SpeedR = s / 2;
 					m_comm.SendCommand( CommCommand.Set );
+				} );
+
+			this.RotateFrameCommand = new RelayCommand(
+				() =>
+				{
+					var d = this.FrameDrawable.RotateDegress;
+					this.FrameDrawable.RotateDegress = (d > 180 ? -180 : d) + 90;
 				} );
 		}
 
