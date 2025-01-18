@@ -113,7 +113,7 @@ static esp_err_t rover_camera_init( camera_config_t * config )
 	ROVER_CAMER_SET_DEFAULT( config->ledc_channel, LEDC_CHANNEL_0 );
 	ROVER_CAMER_SET_DEFAULT( config->pixel_format, PIXFORMAT_JPEG );
 	ROVER_CAMER_SET_DEFAULT( config->frame_size, FRAMESIZE_VGA );
-	ROVER_CAMER_SET_DEFAULT( config->jpeg_quality, 4 );
+	ROVER_CAMER_SET_DEFAULT( config->jpeg_quality, 8 );
 	ROVER_CAMER_SET_DEFAULT( config->fb_count, 2 );
 	ROVER_CAMER_SET_DEFAULT( config->fb_location, CAMERA_FB_IN_PSRAM );
 	ROVER_CAMER_SET_DEFAULT( config->grab_mode, CAMERA_GRAB_WHEN_EMPTY );
@@ -146,7 +146,7 @@ static void rover_camera_task( void * parameters )
 		camera_fb_t * pic = esp_camera_fb_get();
 
 		// use pic->buf to access the image
-		// ESP_LOGI(TAG, "Picture taken! Its size was: %zu bytes", pic->len);
+		// ESP_LOGI( roverLogTAG, "Picture taken! Its size was: %zu bytes", pic->len );
 		ROVER_CALL( camera->frameHandler, &( t_rover_camera_frame ){ .ptr = pic->buf, .len = pic->len } );
 
 		esp_camera_fb_return( pic );

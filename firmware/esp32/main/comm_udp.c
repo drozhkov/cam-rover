@@ -216,7 +216,12 @@ void rover_comm_udp_send( t_rover_comm_udp * commUdp, uint8_t * data, size_t dat
 	// ESP_LOGI( roverLogTAG, "sending data..." );
 
 	xSemaphoreTake( commUdp->sync, portMAX_DELAY );
-	sendto( commUdp->socketFd, data, dataLen, 0, &commUdp->clientAddress, sizeof commUdp->clientAddress );
+	ssize_t sentBytes =
+		sendto( commUdp->socketFd, data, dataLen, 0, &commUdp->clientAddress, sizeof commUdp->clientAddress );
+
+	if ( sentBytes != dataLen ) {
+		ESP_LOGE( roverLogTAG, "sendto failed %d", errno );
+	}
 	xSemaphoreGive( commUdp->sync );
 }
 
