@@ -143,24 +143,20 @@ static void rover_comm_udp_task( void * pvParameters )
 				t_rover_comm_command cmd = ROVER_COMM_MESSAGE_COMMAND( buffer );
 
 				if ( ROVER_COMM_COMMAND_MOVE_SPEED_UP == cmd ) {
-					// ESP_LOGI( roverLogTAG, "ROVER_COMM_COMMAND_MOVE_SPEED_UP" );
 					ROVER_CALL_FUNC(
 						commUdp->handlers.move.speed, motorsSpeed, ROVER_COMM_MESSAGE_MOVE_SPEED( buffer ) );
 				}
 				else if ( ROVER_COMM_COMMAND_MOVE_SPEED_DOWN == cmd ) {
-					// ESP_LOGI( roverLogTAG, "ROVER_COMM_COMMAND_MOVE_SPEED_DOWN" );
 					ROVER_CALL_FUNC(
 						commUdp->handlers.move.speed, motorsSpeed, -ROVER_COMM_MESSAGE_MOVE_SPEED( buffer ) );
 				}
 				else if ( ROVER_COMM_COMMAND_MOVE_TURN_LEFT == cmd ) {
-					// ESP_LOGI( roverLogTAG, "ROVER_COMM_COMMAND_MOVE_TURN_LEFT" );
 					ROVER_CALL_FUNC( commUdp->handlers.move.turn,
 						motorsSpeed,
 						-ROVER_COMM_MESSAGE_MOVE_SPEED( buffer ),
 						ROVER_COMM_MESSAGE_MOVE_SPEED( buffer ) );
 				}
 				else if ( ROVER_COMM_COMMAND_MOVE_TURN_RIGHT == cmd ) {
-					// ESP_LOGI( roverLogTAG, "ROVER_COMM_COMMAND_MOVE_TURN_RIGHT" );
 					ROVER_CALL_FUNC( commUdp->handlers.move.turn,
 						motorsSpeed,
 						ROVER_COMM_MESSAGE_MOVE_SPEED( buffer ),
@@ -173,10 +169,12 @@ static void rover_comm_udp_task( void * pvParameters )
 						ROVER_COMM_MESSAGE_MOVE_SPEED_R( buffer ) );
 				}
 				else if ( ROVER_COMM_COMMAND_MOVE_STOP == cmd ) {
-					// ESP_LOGI( roverLogTAG, "ROVER_COMM_COMMAND_MOVE_STOP" );
 					ROVER_CALL( commUdp->handlers.move.stop );
 					motorsSpeed.motor1 = 0;
 					motorsSpeed.motor2 = 0;
+				}
+				else if ( ROVER_COMM_COMMAND_MOVE_DEADZONE == cmd ) {
+					ROVER_CALL( commUdp->handlers.move.deadzone, ROVER_COMM_MESSAGE_MOVE_DEADZONE( buffer ) );
 				}
 				else if ( ROVER_COMM_COMMAND_CAMERA_FLASH == cmd ) {
 					ROVER_CALL( commUdp->handlers.camera.flash, ROVER_COMM_MESSAGE_CAMERA_FLASH_DUTY( buffer ) );
@@ -207,6 +205,11 @@ void rover_comm_udp_send( t_rover_comm_udp * commUdp, uint8_t * data, size_t dat
 {
 	if ( 0 == commUdp->clientAddress.sa_len ) {
 		// ESP_LOGW( roverLogTAG, "no dest address" );
+		return;
+	}
+
+	if ( dataLen > ( 1024 * 64 ) - 128 ) {
+		ESP_LOGE( roverLogTAG, "invalid UDP packet size" );
 		return;
 	}
 

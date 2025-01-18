@@ -30,12 +30,16 @@
 	( ( (uint32_t)( a_message )[a_index] ) | ( (uint32_t)( a_message )[a_index + 1] << 8 ) |                           \
 		( (uint32_t)( a_message )[a_index + 2] << 16 ) | ( (uint32_t)( a_message )[a_index + 3] << 24 ) )
 
+// 0 - message len
+// 1-4 - message ID
+// 5 - message type (command)
 #define ROVER_COMM_MESSAGE_PAYLOAD_LEN( a_message ) ( ( a_message )[0] )
 #define ROVER_COMM_MESSAGE_ID( a_message ) ROVER_COMM_U32( a_message, 1 )
 #define ROVER_COMM_MESSAGE_COMMAND( a_message ) ( ( a_message )[5] )
 #define ROVER_COMM_MESSAGE_MOVE_SPEED( a_message ) ( ( a_message )[6] )
 #define ROVER_COMM_MESSAGE_MOVE_SPEED_L( a_message ) ( (int32_t)ROVER_COMM_U32( a_message, 6 ) )
 #define ROVER_COMM_MESSAGE_MOVE_SPEED_R( a_message ) ( (int32_t)ROVER_COMM_U32( a_message, 10 ) )
+#define ROVER_COMM_MESSAGE_MOVE_DEADZONE( a_message ) ROVER_COMM_U32( a_message, 6 )
 #define ROVER_COMM_MESSAGE_CAMERA_FLASH_DUTY( a_message ) ( ( a_message )[6] )
 
 
@@ -47,6 +51,7 @@ typedef enum {
 	ROVER_COMM_COMMAND_MOVE_TURN_RIGHT = 'r',
 	ROVER_COMM_COMMAND_MOVE_STOP = 's',
 	ROVER_COMM_COMMAND_MOVE_SET = 't',
+	ROVER_COMM_COMMAND_MOVE_DEADZONE = 'z',
 	ROVER_COMM_COMMAND_CAMERA_FLASH = 'f',
 	ROVER_COMM_COMMAND_ACK = 'a'
 } t_rover_comm_command;

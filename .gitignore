@@ -2,7 +2,6 @@
 /firmware/esp32/build
 /firmware/esp32/.devcontainer
 /firmware/esp32/.vscode
-/firmware/esp32/components/
 /firmware/esp32/dependencies.lock
 /firmware/esp32/managed_components/
 /firmware/esp32/sdkconfig.old

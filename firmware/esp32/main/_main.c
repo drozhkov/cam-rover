@@ -29,6 +29,7 @@
 
 #include "esp_netif.h"
 #include "esp_wifi.h"
+
 #include "nvs_flash.h"
 
 #include "dns_server.h"
@@ -78,6 +79,12 @@ static t_rover_motors_speed rover_comm_handler_move_set( int32_t speedL, int32_t
 t_rover_motors_speed rover_comm_handler_move_turn( int32_t incL, int32_t incR )
 {
 	return rover_drive_change_speed( &roverDrive, incL, incR );
+}
+
+
+void rover_comm_handler_move_deadzone( uint32_t v )
+{
+	roverDrive.deadzone = v;
 }
 
 
@@ -191,6 +198,7 @@ void app_main( void )
 	roverCommControl.handlers.move.stop = rover_comm_handler_move_stop;
 	roverCommControl.handlers.move.turn = rover_comm_handler_move_turn;
 	roverCommControl.handlers.move.set = rover_comm_handler_move_set;
+	roverCommControl.handlers.move.deadzone = rover_comm_handler_move_deadzone;
 	roverCommControl.handlers.camera.flash = rover_comm_handler_camera_flash;
 	roverCommControl.portNo = 101;
 	roverDiscovery.controlPortNo = rover_comm_udp_start( &roverCommControl );

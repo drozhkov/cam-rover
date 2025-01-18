@@ -77,6 +77,8 @@ void rover_drive_init( t_rover_drive * drive )
 		for ( size_t i = 0; i < limit + 1; ++i ) {
 			drive->speedCurve[i] = limit - ( ( limit - i ) * ( limit - i ) / ( 1 * limit ) );
 		}
+
+		drive->deadzone = limit / 3;
 	}
 
 	bdc_motor_handle_t motor1 = NULL;
@@ -110,9 +112,14 @@ int32_t rover_drive_change_motor_speed( t_rover_drive * drive, t_rover_drive_mot
 	}
 
 	// ESP_LOGI( roverLogTAG, "set motor speed: %d, %d", (int)speed, (int)motor->speed );
+	uint32_t actualSpeed = motor->speed != 0 ? ( drive->speedCurve[abs( motor->speed )] + drive->deadzone ) : 0;
 
 	if ( speed == motor->speed ) {
 		goto _l_exit;
+	}
+
+	if ( actualSpeed > drive->pwm.dutyTickMax ) {
+		actualSpeed = drive->pwm.dutyTickMax;
 	}
 
 	if ( speed >= 0 && motor->speed < 0 ) {
@@ -122,10 +129,10 @@ int32_t rover_drive_change_motor_speed( t_rover_drive * drive, t_rover_drive_mot
 		bdc_motor_forward( motor->handle );
 	}
 
-	bdc_motor_set_speed( motor->handle, drive->speedCurve[abs( motor->speed )] );
+	bdc_motor_set_speed( motor->handle, actualSpeed );
 
 _l_exit:
-	return ( drive->speedCurve[abs( motor->speed )] * ( motor->speed < 0 ? -1 : 1 ) );
+	return ( actualSpeed * ( motor->speed < 0 ? -1 : 1 ) );
 }
 
 

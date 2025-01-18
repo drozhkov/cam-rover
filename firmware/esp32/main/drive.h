@@ -47,6 +47,7 @@ typedef struct {
 	t_rover_drive_motor motor1;
 	t_rover_drive_motor motor2;
 	t_rover_drive_pwm pwm;
+	uint32_t deadzone;
 	uint32_t * speedCurve;
 } t_rover_drive;
 

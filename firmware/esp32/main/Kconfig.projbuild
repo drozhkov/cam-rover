@@ -1,4 +1,4 @@
-menu "cam-rover configuration"
+menu "CAM-ROVER configuration"
 
     config ESP_MAX_STA_CONN
         int "Maximal STA connections"

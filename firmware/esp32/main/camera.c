@@ -113,7 +113,7 @@ static esp_err_t rover_camera_init( camera_config_t * config )
 	ROVER_CAMER_SET_DEFAULT( config->ledc_channel, LEDC_CHANNEL_0 );
 	ROVER_CAMER_SET_DEFAULT( config->pixel_format, PIXFORMAT_JPEG );
 	ROVER_CAMER_SET_DEFAULT( config->frame_size, FRAMESIZE_VGA );
-	ROVER_CAMER_SET_DEFAULT( config->jpeg_quality, 12 );
+	ROVER_CAMER_SET_DEFAULT( config->jpeg_quality, 4 );
 	ROVER_CAMER_SET_DEFAULT( config->fb_count, 2 );
 	ROVER_CAMER_SET_DEFAULT( config->fb_location, CAMERA_FB_IN_PSRAM );
 	ROVER_CAMER_SET_DEFAULT( config->grab_mode, CAMERA_GRAB_WHEN_EMPTY );

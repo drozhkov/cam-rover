@@ -66,12 +66,14 @@ typedef t_rover_motors_speed ( *t_rover_comm_handler_move_speed )( int32_t inc )
 typedef void ( *t_rover_comm_handler_move_stop )( void );
 typedef t_rover_motors_speed ( *t_rover_comm_handler_move_turn )( int32_t incL, int32_t incR );
 typedef t_rover_motors_speed ( *t_rover_comm_handler_move_set )( int32_t speedL, int32_t speedR );
+typedef void ( *t_rover_comm_handler_move_deadzone )( uint32_t v );
 
 typedef struct {
 	t_rover_comm_handler_move_speed speed;
 	t_rover_comm_handler_move_stop stop;
 	t_rover_comm_handler_move_turn turn;
 	t_rover_comm_handler_move_set set;
+	t_rover_comm_handler_move_deadzone deadzone;
 } t_rover_comm_move_handlers;
 
 typedef void ( *t_rover_comm_handler_camera_flash )( uint8_t duty );
@@ -79,6 +81,8 @@ typedef void ( *t_rover_comm_handler_camera_flash )( uint8_t duty );
 typedef struct {
 	t_rover_comm_handler_camera_flash flash;
 } t_rover_comm_camera_handlers;
+
+typedef void ( *t_rover_comm_handler_camera_flash )( uint8_t duty );
 
 typedef struct {
 	t_rover_comm_move_handlers move;
