@@ -21,6 +21,7 @@
 
 #include "esp_log.h"
 
+#include "types.h"
 #include "globals.h"
 
 #include "helpers.h"
@@ -30,7 +31,8 @@
 extern const char roverHttpHtmlRootStart[] asm( "_binary_root_html_start" );
 extern const char roverHttpHtmlRootEnd[] asm( "_binary_root_html_end" );
 
-t_rover_http_handler_post_wlan_config roverHttpHandlerPostWlanConfig = NULL;
+static t_rover_http_handler_post_wlan_config roverHttpHandlerPostWlanConfig = NULL;
+static t_rover_http_handler_get_ssid_list roverHttpHandlerGetSsidList = NULL;
 
 static const char * roverLogTAG = "rover.http";
 
@@ -41,15 +43,54 @@ void rover_http_set_handler_post_wlan_config( t_rover_http_handler_post_wlan_con
 }
 
 
+void rover_http_set_handler_get_ssid_list( t_rover_http_handler_get_ssid_list handler )
+{
+	roverHttpHandlerGetSsidList = handler;
+}
+
+
 esp_err_t rover_http_root_handler( httpd_req_t * req )
 {
-	const ssize_t root_len = roverHttpHtmlRootEnd - roverHttpHtmlRootStart;
+	const ssize_t rootHtmlLen = roverHttpHtmlRootEnd - roverHttpHtmlRootStart;
 
-	ESP_LOGI( roverLogTAG, "Serve root %d", req->method );
+	ESP_LOGI( roverLogTAG, "Serve root %d %s", req->method, req->uri );
 
 	if ( HTTP_GET == req->method ) {
+		char action[32];
+
+		size_t queryLen = httpd_req_get_url_query_len( req );
+
+		if ( queryLen > 0 ) {
+			char queryBuffer[queryLen + 1];
+			httpd_req_get_url_query_str( req, queryBuffer, queryLen + 1 );
+			ESP_LOGI( roverLogTAG, "query: %s", queryBuffer );
+
+			if ( httpd_query_key_value( queryBuffer, "a", action, sizeof action ) == ESP_OK ) {
+				bool isRequestHandled = false;
+
+				if ( ROVER_IS_STRING_EQ( "get-ssid-list", action ) && roverHttpHandlerGetSsidList != NULL ) {
+					httpd_resp_set_type( req, "application/json" );
+					const char * responseJson = roverHttpHandlerGetSsidList();
+
+					if ( responseJson != NULL ) {
+						httpd_resp_send( req, responseJson, strlen( responseJson ) );
+					}
+					else {
+						const char json[] = "['<ssid>']";
+						httpd_resp_send( req, json, ( sizeof json ) - 1 );
+					}
+
+					isRequestHandled = true;
+				}
+
+				if ( isRequestHandled ) {
+					goto _l_exit;
+				}
+			}
+		}
+
 		httpd_resp_set_type( req, "text/html" );
-		httpd_resp_send( req, roverHttpHtmlRootStart, root_len );
+		httpd_resp_send( req, roverHttpHtmlRootStart, rootHtmlLen );
 	}
 	else if ( HTTP_POST == req->method ) {
 		char content[req->content_len + 1];
@@ -61,22 +102,20 @@ esp_err_t rover_http_root_handler( httpd_req_t * req )
 			char ssid[32 * 3];
 
 			if ( httpd_query_key_value( content, "ssid", ssid, sizeof ssid ) != ESP_OK ) {
-				goto l_exit;
+				goto _l_exit;
 			}
 
 			char password[64 * 3];
 
 			if ( httpd_query_key_value( content, "password", password, sizeof password ) != ESP_OK ) {
-				goto l_exit;
+				goto _l_exit;
 			}
 
-			if ( roverHttpHandlerPostWlanConfig != NULL ) {
-				roverHttpHandlerPostWlanConfig( rover_uri_unescape( ssid ), rover_uri_unescape( password ) );
-			}
+			ROVER_CALL( roverHttpHandlerPostWlanConfig, rover_uri_unescape( ssid ), rover_uri_unescape( password ) );
 		}
 	}
 
-l_exit:
+_l_exit:
 	return ESP_OK;
 }
 

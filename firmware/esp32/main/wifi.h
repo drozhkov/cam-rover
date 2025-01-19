@@ -23,11 +23,15 @@
 #define __ROVER__WIFI__H
 
 
+#include "types.h"
+
+
 typedef void ( *t_rover_wifi_handler_fail )( void );
+typedef void ( *t_rover_wifi_handler_scan_completed )( t_rover_string_array ssidList );
 
 
-void rover_wifi_init_softap( const char * macString );
-bool rover_wifi_init_sta( const char * ssid, const char * password);
+void rover_wifi_init_softap( const char * macString, t_rover_wifi_handler_scan_completed onScanCompleted );
+bool rover_wifi_init_sta( const char * ssid, const char * password );
 
 
 #endif

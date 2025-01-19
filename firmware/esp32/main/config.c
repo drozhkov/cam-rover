@@ -26,7 +26,7 @@
 #include "config.h"
 
 
-#define ROVER_CONFIG_VERSION 2
+#define ROVER_CONFIG_VERSION 5
 
 static const char roverNvsNamespace[] = "rover";
 static const char roverNvsKeyWlanSsid[] = "wlan.ssid";

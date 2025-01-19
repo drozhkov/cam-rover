@@ -23,6 +23,8 @@
 
 #include "lwip/inet.h"
 
+#include "cJSON.h"
+
 #include "esp_event.h"
 #include "esp_log.h"
 #include "esp_mac.h"
@@ -32,8 +34,8 @@
 
 #include "nvs_flash.h"
 
-#include "dns_server.h"
 #include "esp_http_server.h"
+#include "dns_server.h"
 
 #include "types.h"
 #include "globals.h"
@@ -56,6 +58,7 @@ static t_rover_comm_udp roverCommControl = { 0 };
 static t_rover_comm_udp roverCommStreaming = { 0 };
 static t_rover_camera roverCamera = { 0 };
 static t_rover_drive roverDrive = { 0 };
+static char * roverSsidListJson = NULL;
 
 
 static void rover_comm_handler_move_stop( void )
@@ -111,6 +114,22 @@ static void rover_http_handler_post_wlan_config( const char * ssid, const char *
 		roverLogTAG, "WLAN configuration saved: SSID = %s, password = %s", config.wlan.ssid, config.wlan.password );
 
 	esp_restart();
+}
+
+
+const char * rover_http_handler_get_ssid_list( void )
+{
+	return roverSsidListJson;
+}
+
+
+void rover_wifi_handler_scan_completed( t_rover_string_array ssidList )
+{
+	if ( roverSsidListJson == NULL ) {
+		cJSON * array = cJSON_CreateStringArray( (const char * const *)ssidList.s, ssidList.count );
+		roverSsidListJson = cJSON_Print( array );
+		cJSON_Delete( array );
+	}
 }
 
 
@@ -177,7 +196,7 @@ void app_main( void )
 	}
 	else {
 		esp_netif_set_hostname( esp_netif_create_default_wifi_ap(), roverHostname );
-		rover_wifi_init_softap( macString );
+		rover_wifi_init_softap( macString, rover_wifi_handler_scan_completed );
 
 		// Start the DNS server that will redirect all queries to the softAP IP
 		dns_server_config_t config =
@@ -186,11 +205,11 @@ void app_main( void )
 		start_dns_server( &config );
 	}
 
-	rover_http_set_handler_post_wlan_config( rover_http_handler_post_wlan_config );
-
 	roverCamera.frameHandler = rover_camera_handler_frame;
 	rover_camera_start( &roverCamera );
 
+	rover_http_set_handler_post_wlan_config( rover_http_handler_post_wlan_config );
+	rover_http_set_handler_get_ssid_list( rover_http_handler_get_ssid_list );
 	rover_start_webserver();
 
 	// control

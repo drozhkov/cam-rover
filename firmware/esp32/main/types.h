@@ -58,6 +58,11 @@ typedef struct {
 } t_rover_ptr;
 
 typedef struct {
+	char ** s;
+	size_t count;
+} t_rover_string_array;
+
+typedef struct {
 	int32_t motor1;
 	int32_t motor2;
 } t_rover_motors_speed;

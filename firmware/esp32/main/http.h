@@ -27,9 +27,11 @@
 
 
 typedef void ( *t_rover_http_handler_post_wlan_config )( const char * ssid, const char * password );
+typedef const char * ( *t_rover_http_handler_get_ssid_list )( void );
 
 
 void rover_http_set_handler_post_wlan_config( t_rover_http_handler_post_wlan_config handler );
+void rover_http_set_handler_get_ssid_list( t_rover_http_handler_get_ssid_list handler );
 
 esp_err_t rover_http_root_handler( httpd_req_t * req );
 esp_err_t rover_http_404_error_handler( httpd_req_t * req, httpd_err_code_t err );

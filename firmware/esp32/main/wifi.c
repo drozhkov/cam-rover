@@ -79,7 +79,7 @@ static void rover_wifi_event_handler( void * arg, esp_event_base_t event_base, i
 }
 
 
-void rover_wifi_init_softap( const char * macString )
+void rover_wifi_init_softap( const char * macString, t_rover_wifi_handler_scan_completed onScanCompleted )
 {
 	wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
 	ESP_ERROR_CHECK( esp_wifi_init( &cfg ) );
@@ -94,8 +94,17 @@ void rover_wifi_init_softap( const char * macString )
 	wifiConfig.ap.ssid_len = strlen( (char *)wifiConfig.ap.ssid );
 	strcpy( (char *)wifiConfig.ap.password, macString );
 
-	ESP_ERROR_CHECK( esp_wifi_set_mode( WIFI_MODE_AP ) );
+	ESP_ERROR_CHECK( esp_wifi_set_mode( WIFI_MODE_APSTA ) );
 	ESP_ERROR_CHECK( esp_wifi_set_config( ESP_IF_WIFI_AP, &wifiConfig ) );
+
+	wifi_config_t wifiStaConfig = { .sta = { .threshold.authmode = WIFI_AUTH_OPEN,
+										.sae_pwe_h2e = WPA3_SAE_PWE_BOTH,
+										.sae_h2e_identifier = "",
+										.scan_method = WIFI_ALL_CHANNEL_SCAN } };
+
+	esp_wifi_set_config( WIFI_IF_STA, &wifiStaConfig );
+	esp_netif_create_default_wifi_sta();
+
 	ESP_ERROR_CHECK( esp_wifi_start() );
 
 	esp_netif_ip_info_t ip_info;
@@ -107,6 +116,49 @@ void rover_wifi_init_softap( const char * macString )
 
 	ESP_LOGI(
 		roverLogTAG, "wifi_init_softap finished. SSID:'%s' password:'%s'", wifiConfig.ap.ssid, wifiConfig.ap.password );
+
+	esp_err_t wifiError;
+	wifi_ap_record_t * apRecords = NULL;
+
+	if ( ( wifiError = esp_wifi_scan_start( NULL, true ) ) != ESP_OK ) {
+		goto _l_error;
+	}
+
+	uint16_t apNum;
+
+	if ( ( wifiError = esp_wifi_scan_get_ap_num( &apNum ) ) != ESP_OK ) {
+		goto _l_error;
+	}
+
+	{
+		// wifi_ap_record_t apRecords[apNum];
+		apRecords = calloc( apNum, sizeof( wifi_ap_record_t ) );
+		// memset( apRecords, 0, sizeof( wifi_ap_record_t ) * apNum );
+		uint16_t actualApNum = apNum;
+
+		if ( ( wifiError = esp_wifi_scan_get_ap_records( &actualApNum, apRecords ) ) != ESP_OK ) {
+			goto _l_error;
+		}
+
+		if ( onScanCompleted != NULL ) {
+			char * ssidBuffer[apNum];
+
+			for ( size_t i = 0; i < apNum; i++ ) {
+				ssidBuffer[i] = (char *)apRecords[i].ssid;
+			}
+
+			t_rover_string_array ssidList = { .s = ssidBuffer, .count = apNum };
+			onScanCompleted( ssidList );
+		}
+	}
+
+	goto _l_free_scan_records;
+
+_l_error:
+_l_free_scan_records:
+	if ( apRecords != NULL ) {
+		free( apRecords );
+	}
 }
 
 

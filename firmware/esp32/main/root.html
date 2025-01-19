@@ -2,46 +2,66 @@
 <html>
 
 <head>
-  <style>
-    body {
-      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-      background-color: #4f4f4f;
-      color: aliceblue;
-    }
-  </style>
-  <title>Rover</title>
+	<style>
+		body {
+			font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+			background-color: #4f4f4f;
+			color: aliceblue;
+		}
+	</style>
+	<title>Rover</title>
 </head>
 
 <body>
-  <form action="/" method="post">
-    <table>
-      <tr>
-        <td>
-          SSID:
-        </td>
-        <td>
-          <input type="text" name="ssid">
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Password:
-        </td>
-        <td>
-          <input type="password" name="password">
-        </td>
-      </tr>
-      <tr>
-        <td></td>
-        <td>
-          <input type="submit" value="Save">
-        </td>
-      </tr>
-    </table>
-  </form>
-  <div>
-    <sub>version 0.0.1</sub>
-  </div>
+	<form action="/" method="post">
+		<table>
+			<tr>
+				<td>
+					SSID:
+				</td>
+				<td>
+					<input type="text" name="ssid" list="list-ssid">
+					<datalist id="list-ssid">
+					</datalist>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					Password:
+				</td>
+				<td>
+					<input type="password" name="password">
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+					<input type="submit" value="Save">
+				</td>
+			</tr>
+		</table>
+	</form>
+	<div>
+		<sub>version 0.0.2</sub>
+	</div>
 </body>
+
+<script type="text/javascript">
+	async function getSsidList() {
+		const response = await fetch("?a=get-ssid-list");
+
+		if (response.ok) {
+			const ssidList = await response.json();
+			let list = document.getElementById('list-ssid');
+			ssidList.forEach(function (item) {
+				var option = document.createElement('option');
+				option.value = item;
+				list.appendChild(option);
+			});
+		}
+	}
+
+	getSsidList();
+</script>
 
 </html>
