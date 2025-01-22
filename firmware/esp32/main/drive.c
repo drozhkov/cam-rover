@@ -100,19 +100,45 @@ void rover_drive_init( t_rover_drive * drive )
 }
 
 
-int32_t rover_drive_change_motor_speed( t_rover_drive * drive, t_rover_drive_motor * motor, int32_t speedInc )
+size_t rover_drive_find_speed_index( t_rover_drive * drive, uint32_t speed )
 {
+	for ( size_t i = 0; i <= drive->pwm.dutyTickMax; ++i ) {
+		if ( drive->speedCurve[i] >= speed ) {
+			return i;
+		}
+	}
+
+	return 0;
+}
+
+
+int32_t rover_drive_change_motor_speed(
+	t_rover_drive * drive, t_rover_drive_motor * motor, int32_t speedInc, bool isDirectMode )
+{
+
 	int32_t speed = motor->speed;
 
-	if ( abs( speed + speedInc ) > drive->pwm.dutyTickMax ) {
-		motor->speed = drive->pwm.dutyTickMax;
+	if ( isDirectMode ) {
+		if ( abs( speedInc ) < drive->deadzone ) {
+			speedInc = 0;
+		}
+		else {
+			speedInc = ( abs( speedInc ) - drive->deadzone ) * ( speedInc < 0 ? -1 : 1 );
+		}
+
+		motor->speed = rover_drive_find_speed_index( drive, abs( speedInc ) ) * ( speedInc < 0 ? -1 : 1 );
 	}
 	else {
-		motor->speed += speedInc;
+		if ( abs( speed + speedInc ) > drive->pwm.dutyTickMax ) {
+			motor->speed = drive->pwm.dutyTickMax;
+		}
+		else {
+			motor->speed += speedInc;
+		}
 	}
 
 	// ESP_LOGI( roverLogTAG, "set motor speed: %d, %d", (int)speed, (int)motor->speed );
-	uint32_t actualSpeed = motor->speed != 0 ? ( drive->speedCurve[abs( motor->speed )] + drive->deadzone ) : 0;
+	uint32_t actualSpeed = ( motor->speed != 0 ? ( drive->speedCurve[abs( motor->speed )] + drive->deadzone ) : 0 );
 
 	if ( speed == motor->speed ) {
 		goto _l_exit;
@@ -136,10 +162,11 @@ _l_exit:
 }
 
 
-t_rover_motors_speed rover_drive_change_speed( t_rover_drive * drive, int32_t motor1SpeedInc, int32_t motor2SpeedInc )
+t_rover_motors_speed rover_drive_change_speed(
+	t_rover_drive * drive, int32_t motor1SpeedInc, int32_t motor2SpeedInc, bool isDirectMode )
 {
 	t_rover_motors_speed r;
-	r.motor1 = rover_drive_change_motor_speed( drive, &drive->motor1, motor1SpeedInc );
-	r.motor2 = rover_drive_change_motor_speed( drive, &drive->motor2, motor2SpeedInc );
+	r.motor1 = rover_drive_change_motor_speed( drive, &drive->motor1, motor1SpeedInc, isDirectMode );
+	r.motor2 = rover_drive_change_motor_speed( drive, &drive->motor2, motor2SpeedInc, isDirectMode );
 	return r;
 }

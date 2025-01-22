@@ -23,6 +23,8 @@
 #define __ROVER__DRIVE__H
 
 
+#include <stdbool.h>
+
 #include "bdc_motor.h"
 
 
@@ -53,8 +55,11 @@ typedef struct {
 
 
 void rover_drive_init( t_rover_drive * drive );
-int32_t rover_drive_change_motor_speed( t_rover_drive * drive, t_rover_drive_motor * motor, int32_t speedInc );
-t_rover_motors_speed rover_drive_change_speed( t_rover_drive * drive, int32_t motor1SpeedInc, int32_t motor2SpeedInc );
+int32_t rover_drive_change_motor_speed(
+	t_rover_drive * drive, t_rover_drive_motor * motor, int32_t speedInc, bool isDirectMode );
+	
+t_rover_motors_speed rover_drive_change_speed(
+	t_rover_drive * drive, int32_t motor1SpeedInc, int32_t motor2SpeedInc, bool isDirectMode );
 
 
 #endif

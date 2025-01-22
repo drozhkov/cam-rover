@@ -63,25 +63,25 @@ static char * roverSsidListJson = NULL;
 
 static void rover_comm_handler_move_stop( void )
 {
-	rover_drive_change_speed( &roverDrive, -roverDrive.motor1.speed, -roverDrive.motor2.speed );
+	rover_drive_change_speed( &roverDrive, -roverDrive.motor1.speed, -roverDrive.motor2.speed, false );
 }
 
 
 static t_rover_motors_speed rover_comm_handler_move_speed( int32_t inc )
 {
-	return rover_drive_change_speed( &roverDrive, inc, inc );
+	return rover_drive_change_speed( &roverDrive, inc, inc, false );
 }
 
 
 static t_rover_motors_speed rover_comm_handler_move_set( int32_t speedL, int32_t speedR )
 {
-	return rover_drive_change_speed( &roverDrive, speedL - roverDrive.motor1.speed, speedR - roverDrive.motor2.speed );
+	return rover_drive_change_speed( &roverDrive, speedL, speedR, true );
 }
 
 
 t_rover_motors_speed rover_comm_handler_move_turn( int32_t incL, int32_t incR )
 {
-	return rover_drive_change_speed( &roverDrive, incL, incR );
+	return rover_drive_change_speed( &roverDrive, incL, incR, false );
 }
 
 
